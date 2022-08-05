@@ -229,7 +229,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoombiniPrefab: {fileID: 1643002637438194493, guid: e02deec35b33f04438b8cdee1800d177, type: 3}
-  count: 16
+  count: 25
+  gap: 1
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
