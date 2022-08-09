@@ -36,6 +36,9 @@ public class CreateZoombinis : MonoBehaviour
     void CreateZoombini(Vector3 pos)
     {
         GameObject clone = Instantiate(zoombiniPrefab, pos, Quaternion.identity);
+        // Create Parent of clones
+        clone.transform.parent = GameObject.Find("Zoombinis").transform;
+
         Zoombini zoombini = clone.GetComponent<Zoombini>();
 
         zoombini.ChangeType(

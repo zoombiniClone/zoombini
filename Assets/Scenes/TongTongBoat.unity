@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &65211881
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -341,6 +341,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 0}
+--- !u!1 &242788215
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 242788216}
+  m_Layer: 0
+  m_Name: Stumps
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &242788216
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242788215}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.79841, y: -0.111912586, z: -1.0542711}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &342048366
 GameObject:
   m_ObjectHideFlags: 0
@@ -640,23 +670,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31709b283c43da5448a9f9b543bfc6b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Stumps:
-  - {fileID: 2018170965}
-  - {fileID: 1009282722}
-  - {fileID: 2072949831}
-  - {fileID: 1075806971}
-  - {fileID: 1150009133}
-  - {fileID: 1521978026}
-  - {fileID: 99522257}
-  - {fileID: 1566715622}
-  - {fileID: 1042673844}
-  - {fileID: 1160859520}
-  - {fileID: 692449025}
-  - {fileID: 342048366}
-  - {fileID: 825813991}
-  - {fileID: 349694099}
-  - {fileID: 1261388798}
-  - {fileID: 764957635}
+  stumpPrefab: {fileID: 426827206426524404, guid: ad3c735c08cd3554fbcfbfa16a6747c7, type: 3}
+  count: 16
+  stageNum: 4
 --- !u!4 &545011072
 Transform:
   m_ObjectHideFlags: 0
@@ -1569,6 +1585,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 0}
+--- !u!1 &1104482368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1104482369}
+  m_Layer: 0
+  m_Name: Zoombinis
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1104482369
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1104482368}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 4.79841, y: -0.111912586, z: -1.0542711}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1119631061
 GameObject:
   m_ObjectHideFlags: 0
