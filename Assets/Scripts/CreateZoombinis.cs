@@ -5,6 +5,7 @@ using UnityEngine;
 public class CreateZoombinis : MonoBehaviour
 {
     [SerializeField] private GameObject zoombiniPrefab;
+    [SerializeField] private Vector2 spawnPosition;
     [SerializeField] private int count = 16;
     [SerializeField] private float gap = 1;
 
@@ -12,7 +13,7 @@ public class CreateZoombinis : MonoBehaviour
     {
         int len = (int)Mathf.Round(Mathf.Sqrt(count));
         int less = count;
-        Vector3 startPosition = new Vector3(-len * gap * 0.5f, -len * gap * 0.5f, 0);
+        Vector3 startPosition = new Vector3(-len * gap * 0.5f, -len * gap * 0.5f, 0) + new Vector3(spawnPosition.x, spawnPosition.y, 0);
 
         for (int x = 0; x < len; x++)
         {

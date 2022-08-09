@@ -4,9 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - stump
   - FullStump
   - Zoombini
+  - Stump
   layers:
   - Default
   - TransparentFX
