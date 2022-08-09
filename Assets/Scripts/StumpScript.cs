@@ -4,31 +4,44 @@ using UnityEngine;
 
 public class StumpScript : MonoBehaviour
 {
+    // color change when selected
     [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private GameObject obj;
-    public bool isFull = false;
+    // Save Target
+    private List<GameObject> victims = new List<GameObject>();
+    private bool isFull = false;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.CompareTag("Player") && isFull == false)
+        if (other.CompareTag("Zoombini") && !isFull)
         {
-            Debug.Log("Stump OnTriggerEnter!!");
-            // isFull = true;
-            obj = other.gameObject;
-            gameObject.tag = "FullStump";
+            // Debug.Log("Stump OnTriggerEnter!!");
+            victims.Add(other.gameObject);
+            // gameObject.tag = "FullStump";
         }
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("Stump OnTriggerExit..");
-        if(!isFull)
+        // Debug.Log("Stump OnTriggerExit..");
+        if (other.CompareTag("Zoombini") && !isFull)
         {
-            gameObject.tag = "stump";
-        //    gameObject.GetComponent<CircleCollider2D>().enabled = false;
+            victims.Remove(other.gameObject);
+            // gameObject.tag = "stump";
+            // gameObject.GetComponent<CircleCollider2D>().enabled = false;
             // gameObject.tag = "FullStump";
-
         }
+    }
 
+    public void OnTouchFinish(GameObject obj)
+    {
+        if (!victims.Contains(obj)) return;
+        isFull = true;
+        obj.transform.position = transform.position;
+    }
+
+    public void OnTouchStart(GameObject obj)
+    {
+        if (!victims.Contains(obj)) return;
+        isFull = false;
     }
 }

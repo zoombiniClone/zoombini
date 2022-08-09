@@ -4,19 +4,27 @@ using UnityEngine;
 
 public class ObjDrag : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    [SerializeField] private GameObject obj;
-    public Vector3 LoadedPos;
-    float startPosx, startPosY, finPosX, finPosY;
+    // color change
+    // [SerializeField] private SpriteRenderer spriteRenderer;
+    // Save Stump
+    // [SerializeField] private GameObject obj;
+    // private Vector3 loadedPos;
+
+    private SpriteRenderer spriteRenderer;
+    private List<GameObject> footholdObjects = new List<GameObject>();
+    Vector2 startPos;
+    Vector3 previousPos;
     bool isBeingHeld = false;
-    public bool isInLine;
-    Color oriCol;
+    // original Color
+    Color originColor;
 
     private void Start() 
     {
-        LoadedPos = this.transform.position;
-        oriCol = this.spriteRenderer.color;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        // loadedPos = transform.position;
+        originColor = spriteRenderer.color;
     }
+
     private void Update() 
     {
         if(isBeingHeld)
@@ -24,77 +32,89 @@ public class ObjDrag : MonoBehaviour
             Vector2 mousePos;
             mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            this.gameObject.transform.position = new Vector2(mousePos.x - startPosx, mousePos.y - startPosY);
+            transform.position = mousePos - startPos;
         }
     }
 
 
-    #region 마우스 드래그앤 드롭
+    #region Mouse Drag and Drop
 
     private void OnMouseDown()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (!Input.GetMouseButtonDown(0)) return;
+
+        spriteRenderer.color = new Color(1f, 1f, 1f, .5f);
+        Vector3 mousePos;
+        mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        startPos = mousePos - transform.position;
+        previousPos = transform.position;
+
+        isBeingHeld = true;
+
+        // leave hold
+        GameObject footholdObject = GetNeareastFootholdObject();
+
+        if (footholdObject)
         {
-            spriteRenderer.color = new Color(1f, 1f, 1f, .5f);
-            Vector3 mousePos;
-            mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            if (footholdObject.GetComponent<StumpScript>() != null)
+            {
+                footholdObject.GetComponent<StumpScript>().OnTouchStart(gameObject);
+            }
 
-            startPosx = mousePos.x - this.transform.position.x;
-            startPosY = mousePos.y - this.transform.position.y;
-
-            isBeingHeld = true;
+            footholdObject = null;
         }
     }
 
     private void OnMouseUp() 
     {
         // spriteRenderer.color = new Color(1f, 1f, 1f, 1f);
-        spriteRenderer.color = oriCol;
+        spriteRenderer.color = originColor;
         isBeingHeld = false;
 
-        if(isInLine)
-        {
-            this.gameObject.transform.position = new Vector3(finPosX, finPosY, -1f);
-            obj.GetComponent<StumpScript>().isFull = true;
+        transform.position = previousPos;
 
-        }
-        else
+        // hold check
+        GameObject footholdObject = GetNeareastFootholdObject();
+
+        if (footholdObject)
         {
-            this.gameObject.transform.position = LoadedPos;
-            obj.GetComponent<StumpScript>().isFull = false;
+            if (footholdObject.GetComponent<StumpScript>() != null)
+            {
+                footholdObject.GetComponent<StumpScript>().OnTouchFinish(gameObject);
+            }
         }
     }
 
     #endregion
-    
-    #region 타임라인이랑 맞는지
-    
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("Obj OnTriggerEnter!!");
-        obj = other.gameObject;
-        if(other.CompareTag("stump") && obj.GetComponent<StumpScript>().isFull == false)
-        {
-            isInLine = true;
-            finPosX = other.transform.position.x;
-            finPosY = other.transform.position.y;
-        }
-        else
-            ;
-            // obj = null;
-            // obj.Destroy();
-
+        footholdObjects.Add(other.gameObject);
     }
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        Debug.Log("Obj OnTriggerExit...");
-        if(other.CompareTag("FullStump") && other.gameObject.GetComponent<StumpScript>().isFull == true)
-        {
-            isInLine = false;
-        }
+        footholdObjects.Remove(other.gameObject);
     }
 
+    private GameObject GetNeareastFootholdObject()
+    {
+        GameObject neareastObject = null;
 
-    #endregion
+        footholdObjects.ForEach((obj) =>
+        {
+            if (neareastObject == null)
+            {
+                neareastObject = obj;
+            }
+            else if (Vector3.Distance(neareastObject.transform.position, transform.position) > 
+                     Vector3.Distance(obj.transform.position, transform.position))
+            {
+                neareastObject = obj;
+            }
+        });
+
+        return neareastObject;
+    }
 }
