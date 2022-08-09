@@ -4,6 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - stump
+  - FullStump
   - Zoombini
   layers:
   - Default
@@ -39,6 +41,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 3724335959
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 2445903573
     locked: 0
