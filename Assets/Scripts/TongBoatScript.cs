@@ -2,12 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class MapArray
-{
-    public GameObject[] map;
-}
-
 public class TongBoatScript : MonoBehaviour
 {
     enum Stage
@@ -188,25 +182,3 @@ public class TongBoatScript : MonoBehaviour
 
 
 }
-
-
-// { {1, 1, 1, 1, 1, 1, 1},
-//   {1, 0, 0, 0, 0, 0, 0},
-//   {1, 0, 0, 0, 0, 0, 0},
-//   {1, 1, 1, 1, 1, 1, 1} };
-
-// { {0, 0, 0, 0, 0, 0, 0},
-//   {1, 1, 1, 1, 1, 1, 1},
-//   {1, 1, 1, 1, 1, 1, 1},
-//   {0, 0, 0, 0, 0, 0, 0} };
-
-// { {1, 1, 1, 1, 1, 1, 1},
-//   {1, 0, 0, 0, 0, 0, 0},
-//   {1, 0, 0, 0, 0, 0, 0},
-//   {1, 1, 1, 1, 1, 1, 1} };
-
-// { {1, 1, 1, 1, 0},
-//   {0, 1, 1, 1, 1},
-//   {1, 1, 1, 1, 0},
-//   {0, 1, 1, 1, 1} };
-

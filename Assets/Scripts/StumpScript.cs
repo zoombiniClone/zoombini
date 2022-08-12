@@ -10,6 +10,16 @@ public class StumpScript : MonoBehaviour
     private List<GameObject> victims = new List<GameObject>();
     private bool isFull = false;
 
+    public void SetLinkedStumps(List<StumpScript> stumps)
+    {
+        return;
+    }
+
+    public GameObject GetZoombini()
+    {
+        return null;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Zoombini") && !isFull)
