@@ -672,7 +672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stumpPrefab: {fileID: 426827206426524404, guid: ad3c735c08cd3554fbcfbfa16a6747c7, type: 3}
   count: 16
-  stageNum: 4
+  stage: 3
 --- !u!4 &545011072
 Transform:
   m_ObjectHideFlags: 0

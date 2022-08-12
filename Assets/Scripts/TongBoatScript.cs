@@ -10,24 +10,47 @@ public class MapArray
 
 public class TongBoatScript : MonoBehaviour
 {
+    enum Stage
+    {
+        Stage1,
+        Stage2,
+        Stage3,
+        Stage4
+    };
+
     // Making stump map
     [SerializeField] private GameObject stumpPrefab;
     [SerializeField] private int count = 16;
-    [SerializeField] private int stageNum = 2;  // stage : 1~4 (ㄷ, =, ㅁ, zig-zag)
-    [SerializeField] private int [,] map_1 = new int[4, 7];
-    [SerializeField] private int [,] map_2 = new int[2, 8];
-    [SerializeField] private int [,] map_3 = new int[4, 4];
-    [SerializeField] private int [,] map_4 = new int[4, 5];
+    [SerializeField] private Stage stage = Stage.Stage1;  // stage : 1~4 (ㄷ, =, ㅁ, zig-zag)
+
+    private Transform stumpParentTransform;
+    private int [,] map_1 = new int[4, 7];
+    private int [,] map_2 = new int[2, 8];
+    private int [,] map_3 = new int[4, 4];
+    private int [,] map_4 = new int[4, 5];
 
     void Start()
     {
         Vector3 startPosition = new Vector3(0f, 0f, 0f);
+        stumpParentTransform = GameObject.Find("Stumps").transform;
 
-        if (stageNum==1)    CreateStage1(startPosition, map_1);
-        else if (stageNum==2)    CreateStage2(startPosition, map_2);
-        else if (stageNum==3)    CreateStage3(startPosition, map_3);
-        else if (stageNum==4)    CreateStage4(startPosition, map_4);
-
+        switch (stage)
+        {
+            case Stage.Stage1:
+                CreateStage1(startPosition, map_1);
+                break;
+            case Stage.Stage2:
+                CreateStage2(startPosition, map_2);
+                break;
+            case Stage.Stage3:
+                CreateStage3(startPosition, map_3);
+                break;
+            case Stage.Stage4:
+                CreateStage4(startPosition, map_4);
+                break;
+            default:
+                break;            
+        }
     }
 
     void CreateTongBoat(Vector3 pos)
@@ -35,11 +58,7 @@ public class TongBoatScript : MonoBehaviour
         GameObject clone = Instantiate(stumpPrefab, pos, Quaternion.identity);
         clone.transform.Rotate(60f, 0f, 0f);
         // Create Parent of clones
-        clone.transform.parent = GameObject.Find("Stumps").transform;
-
-        Stump stump = clone.GetComponent<Stump>();
-        int num = Random.Range(0,4);
-        stump.ChangeType(num);
+        clone.transform.parent = stumpParentTransform;
     }
 
     void CreateStage1(Vector3 pos, int[,] map)
@@ -62,7 +81,7 @@ public class TongBoatScript : MonoBehaviour
         {
             for (int c=0; c<col; c++)
             {
-                if (count == 0)   break;
+                if (count == 0) break;
                 else if (map[r,c] == 1) 
                 {
                     CreateTongBoat(pos + new Vector3(c%col * 1.3f, -r%row * 1.0f, 0f));
@@ -127,7 +146,23 @@ public class TongBoatScript : MonoBehaviour
         for (int r=0; r<row; r++)
         {
             for (int c=0; c<col; c++)
-                map[r,c] = 1;
+            {
+                map[r, c] = 1;
+                if (r % 2 == 0)
+                {
+                    if (c == col-1)
+                    {
+                        map[r, c] = 0;
+                    }
+                }
+                else
+                {
+                    if (c == 0)
+                    {
+                        map[r, c] = 0;
+                    }
+                }
+            }
         }
         // create object
         for (int r=0; r<row; r++)
@@ -137,7 +172,14 @@ public class TongBoatScript : MonoBehaviour
                 if (count == 0) break;
                 else if (map[r,c] == 1)
                 {
-                    CreateTongBoat(pos + new Vector3(c%col * 1.3f, -r%row * 1.0f, 0f));
+                    if (r % 2 == 0)
+                    {
+                        CreateTongBoat(pos + new Vector3(c % col * 1.3f, -r % row * 1.0f, 0f));
+                    }
+                    else
+                    {
+                        CreateTongBoat(pos + new Vector3(c % col * 1.3f - 0.7f, -r % row * 1.0f, 0f));
+                    }
                     count--;
                 }
             }
@@ -153,6 +195,15 @@ public class TongBoatScript : MonoBehaviour
 //   {1, 0, 0, 0, 0, 0, 0},
 //   {1, 1, 1, 1, 1, 1, 1} };
 
+// { {0, 0, 0, 0, 0, 0, 0},
+//   {1, 1, 1, 1, 1, 1, 1},
+//   {1, 1, 1, 1, 1, 1, 1},
+//   {0, 0, 0, 0, 0, 0, 0} };
+
+// { {1, 1, 1, 1, 1, 1, 1},
+//   {1, 0, 0, 0, 0, 0, 0},
+//   {1, 0, 0, 0, 0, 0, 0},
+//   {1, 1, 1, 1, 1, 1, 1} };
 
 // { {1, 1, 1, 1, 0},
 //   {0, 1, 1, 1, 1},

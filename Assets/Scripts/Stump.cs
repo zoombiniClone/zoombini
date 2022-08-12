@@ -11,6 +11,8 @@ public class Stump : MonoBehaviour
     void Awake()
     {
         stpRenderer = transform.GetComponent<SpriteRenderer>();
+        int num = Random.Range(0,4);
+        ChangeType(num);
     }
 
     public void ChangeType(int num)
