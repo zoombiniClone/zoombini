@@ -45,8 +45,7 @@ public class Zoombini : MonoBehaviour
         ChangeType();
     }
 
-    private void Update()
-    {
-        
+    public int[] GetType() {
+        return new int[4]{hair, eyes, nose, legs};
     }
 }

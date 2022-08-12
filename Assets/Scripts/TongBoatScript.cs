@@ -43,21 +43,25 @@ public class TongBoatScript : MonoBehaviour
                 CreateStage4(startPosition, map_4);
                 break;
             default:
-                break;            
+                break;
         }
     }
 
-    void CreateTongBoat(Vector3 pos)
+    GameObject CreateTongBoat(Vector3 pos)
     {
         GameObject clone = Instantiate(stumpPrefab, pos, Quaternion.identity);
         clone.transform.Rotate(60f, 0f, 0f);
         // Create Parent of clones
         clone.transform.parent = stumpParentTransform;
+
+        return clone;
     }
 
     void CreateStage1(Vector3 pos, int[,] map)
     {
         int row=4, col=7;
+
+        GameObject[,] tongBoatsMap = new GameObject[4, 7];
         // create map array
         for (int r=0; r<row; r++)
         {
@@ -70,24 +74,48 @@ public class TongBoatScript : MonoBehaviour
                     map[r,c] = 0;
             }
         }
+
         // create object
         for (int r=0; r<row; r++)
         {
             for (int c=0; c<col; c++)
             {
                 if (count == 0) break;
-                else if (map[r,c] == 1) 
+                else if (map[r, c] == 1) 
                 {
-                    CreateTongBoat(pos + new Vector3(c%col * 1.3f, -r%row * 1.0f, 0f));
+                    tongBoatsMap[r, c] = CreateTongBoat(pos + new Vector3(c%col * 1.3f, -r%row * 1.0f, 0f));
                     count--;
                 }
             }
         }
+
+        for (int c=0; c<col; c++)
+        {
+            if (c < col - 1)
+            {
+                tongBoatsMap[0, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[0, c + 1].GetComponent<StumpScript>());
+                tongBoatsMap[3, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[3, c + 1].GetComponent<StumpScript>());
+            }
+            if (c > 0)
+            {
+                tongBoatsMap[0, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[0, c - 1].GetComponent<StumpScript>());
+                tongBoatsMap[3, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[3, c - 1].GetComponent<StumpScript>());
+            }
+        }
+        for (int r=0; r<row; r++)
+        {
+            if (r > 0)
+                tongBoatsMap[r, 0].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r - 1, 0].GetComponent<StumpScript>());
+            if (r < row - 1)
+                tongBoatsMap[r, 0].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r + 1, 0].GetComponent<StumpScript>());
+        }
+
     }
 
     void CreateStage2(Vector3 pos, int[,] map)
     {
         int row=2, col=8;
+        GameObject[,] tongBoatsMap = new GameObject[2, 8];
         // create map array
         for (int r=0; r<row; r++)
         {
@@ -102,9 +130,26 @@ public class TongBoatScript : MonoBehaviour
                 if (count == 0) break;
                 else if (map[r,c] == 1)
                 {
-                    CreateTongBoat(pos + new Vector3(c%col * 1.3f, -r%row * 1.0f, 0f));
+                    tongBoatsMap[r, c] = CreateTongBoat(pos + new Vector3(c%col * 1.3f, -r%row * 1.0f, 0f));
                     count--;
                 }
+            }
+        }
+
+        for (int r=0; r<row; r++) 
+        {
+            for (int c=0; c<col; c++) 
+            {
+                if (r == 0) 
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r+1, c].GetComponent<StumpScript>());
+                else
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r-1, c].GetComponent<StumpScript>());
+
+                if (c != 0) 
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r, c-1].GetComponent<StumpScript>());
+
+                if (c != col-1) 
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r, c+1].GetComponent<StumpScript>());
             }
         }
     }
@@ -112,6 +157,7 @@ public class TongBoatScript : MonoBehaviour
     void CreateStage3(Vector3 pos, int[,] map)
     {
         int row=4, col=4;
+        GameObject[,] tongBoatsMap = new GameObject[4, 4];
         // create map array
         for (int r=0; r<row; r++)
         {
@@ -126,9 +172,25 @@ public class TongBoatScript : MonoBehaviour
                 if (count == 0) break;
                 else if (map[r,c] == 1)
                 {
-                    CreateTongBoat(pos + new Vector3(c%col * 1.3f, -r%row * 1.0f, 0f));
+                    tongBoatsMap[r, c] = CreateTongBoat(pos + new Vector3(c%col * 1.3f, -r%row * 1.0f, 0f));
                     count--;
                 }
+            }
+        }
+
+        for (int r=0; r<row; r++) 
+        {
+            for (int c=0; c<col; c++) 
+            {
+                if (r != 0) 
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r-1, c].GetComponent<StumpScript>());
+                if (r != row-1)
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r+1, c].GetComponent<StumpScript>());
+
+                if (c != 0) 
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r, c-1].GetComponent<StumpScript>());
+                if (c != col-1) 
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r, c+1].GetComponent<StumpScript>());
             }
         }
     }
@@ -136,26 +198,21 @@ public class TongBoatScript : MonoBehaviour
     void CreateStage4(Vector3 pos, int[,] map)
     {
         int row=4, col=5;
+        GameObject[,] tongBoatsMap = new GameObject[4, 5];
         // create map array
         for (int r=0; r<row; r++)
         {
             for (int c=0; c<col; c++)
             {
                 map[r, c] = 1;
-                if (r % 2 == 0)
+                if (r % 2 == 0) 
                 {
                     if (c == col-1)
-                    {
                         map[r, c] = 0;
-                    }
                 }
                 else
-                {
                     if (c == 0)
-                    {
                         map[r, c] = 0;
-                    }
-                }
             }
         }
         // create object
@@ -167,18 +224,59 @@ public class TongBoatScript : MonoBehaviour
                 else if (map[r,c] == 1)
                 {
                     if (r % 2 == 0)
-                    {
-                        CreateTongBoat(pos + new Vector3(c % col * 1.3f, -r % row * 1.0f, 0f));
-                    }
+                        tongBoatsMap[r, c] = CreateTongBoat(pos + new Vector3(c % col * 1.3f, -r % row * 1.0f, 0f));
                     else
-                    {
-                        CreateTongBoat(pos + new Vector3(c % col * 1.3f - 0.7f, -r % row * 1.0f, 0f));
-                    }
+                        tongBoatsMap[r, c] = CreateTongBoat(pos + new Vector3(c % col * 1.3f - 0.7f, -r % row * 1.0f, 0f));
                     count--;
                 }
             }
         }
+        
+        
+        for (int r=0; r < row; r++)
+        {
+            for (int c = 0; c < col; c++)
+            {
+                if (c != 0 && map[r, c - 1] == 1 && map[r,c] == 1)   // [r,c-1] - [r,c] : col back
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r, c - 1].GetComponent<StumpScript>());
+
+                if (c != col - 1 && map[r, c + 1] == 1 && map[r, c] == 1) // [r,c] - [r,c+1] : col forward
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r, c + 1].GetComponent<StumpScript>());
+
+                if (r % 2 == 0) // 0,2 : row up&down
+                {
+                    if (r > 0 && map[r - 1, c] == 1 && map[r, c] == 1)
+                        tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r - 1, c].GetComponent<StumpScript>());
+
+                    if (r < row - 2 && map[r + 1, c] == 1 && map[r, c] == 1)
+                        tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r + 1, c].GetComponent<StumpScript>());
+                }
+                else   // 1,3 : row up&down
+                {
+                    if (r > 1 && map[r - 1, c] == 1 && map[r, c] == 1)
+                        tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r - 1, c].GetComponent<StumpScript>());
+
+                    if (r < row - 1 && map[r + 1, c] == 1 && map[r, c] == 1)
+                        tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r + 1, c].GetComponent<StumpScript>());
+                }
+
+                if (r == 0 && map[r, c] == 1)   // diag
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[1, c + 1].GetComponent<StumpScript>());
+                if (r == 1 && map[r, c] == 1)
+                {
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r - 1, c - 1].GetComponent<StumpScript>());
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r + 1, c - 1].GetComponent<StumpScript>());
+                }
+                if (r == 2 && map[r, c] == 1)
+                {
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r - 1, c + 1].GetComponent<StumpScript>());
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r + 1, c + 1].GetComponent<StumpScript>());
+                }
+                if (r == 3 && map[r, c] == 1)
+                    tongBoatsMap[r, c].GetComponent<StumpScript>().AddLinkedStump(tongBoatsMap[r - 1, c - 1].GetComponent<StumpScript>());
+                
+
+            }
+        }
     }
-
-
 }
